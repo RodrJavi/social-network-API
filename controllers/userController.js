@@ -85,6 +85,8 @@ module.exports = {
       if (!user) {
         res.status(404).json({ message: "No user/friend with that ID" });
       }
+
+      res.json(user);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -102,6 +104,8 @@ module.exports = {
       if (!user) {
         res.status(404).json({ message: "No user/friend with that ID" });
       }
+
+      res.json(user);
     } catch (err) {
       res.status(500).json(err);
     }
