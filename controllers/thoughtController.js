@@ -33,7 +33,7 @@ module.exports = {
       const thought = await Thought.create(req.body);
       res.json(thought);
       const user = await User.findOneAndUpdate(
-        { _id: req.params.userId },
+        { _id: req.body.userId },
         { $addToSet: { thoughts: thought._id } },
         { runValidators: true, new: true }
       );
@@ -53,6 +53,18 @@ module.exports = {
       const thought = await Thought.findOneAndDelete({
         _id: req.params.thoughtId,
       });
+
+      const user = await User.findOneAndUpdate(
+        { _id: thought.userId },
+        { $pull: { thoughts: req.params.thoughtId } },
+        { runValidators: true, new: true }
+      );
+
+      if (!user) {
+        res
+          .status(404)
+          .json({ message: "No user with that ID to remove the thought from" });
+      }
 
       if (!thought) {
         res.status(404).json({ message: "No thought with that ID" });
